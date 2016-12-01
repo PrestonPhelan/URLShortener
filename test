@@ -1,0 +1,13 @@
+ShortenedUrl.create_for_user_and_long_url!(1, "www.yahoo.com")
+ShortenedUrl.create_for_user_and_long_url!(1, "www.bing.com")
+ShortenedUrl.create_for_user_and_long_url!(1, "www.facebook.com")
+ShortenedUrl.create_for_user_and_long_url!(1, "www.espn.com")
+ShortenedUrl.create_for_user_and_long_url!(1, "www.whitehouse.gov")
+
+a = ShortenedUrl.new
+a.user_id = 1
+a.long_url = "www.pop.com"
+a.short_url = ShortenedUrl.random_code
+a.valid?
+a.errors.full_messages
+a.save
