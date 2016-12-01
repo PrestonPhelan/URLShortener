@@ -1,0 +1,27 @@
+puts "What is your email?"
+user_email = gets.chomp
+
+user = User.find_by(email: user_email)
+
+begin
+  puts "Do you want to visit a shortened url or create a new one? (Visit/Create)"
+  response = gets.chomp
+  raise unless response == "Create" || response == "Visit"
+  case response
+  when "Create"
+    puts "What is your long URL?"
+    long_url = gets.chomp
+    shortened_url = ShortenedUrl.create_for_user_and_long_url!(user, long_url)
+    puts "Short url is: #{shortened_url.short_url}"
+  when "Visit"
+    puts "What is your shortened url?"
+    shortened_url = gets.chomp
+    short_url_obj = ShortenedUrl.find_by(short_url: shortened_url)
+    puts "Launching #{short_url_obj.long_url} ..."
+    puts "Goodbye!"
+    Visit.record_visit!(user.id, short_url_obj.id)
+    ##Launch
+  end
+rescue
+  retry
+end

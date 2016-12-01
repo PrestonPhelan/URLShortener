@@ -7,6 +7,7 @@ class ShortenedUrl < ActiveRecord::Base
     class_name: :User
 
   has_many :visitors,
+    -> { distinct },
     through: :visits,
     source: :visitor
 
@@ -32,4 +33,17 @@ class ShortenedUrl < ActiveRecord::Base
       :user_id => user,
       :short_url => ShortenedUrl.random_code)
   end
+
+  def num_clicks
+    visits.length
+  end
+
+  def num_uniques
+    visitors.count
+  end
+
+  def num_recent_uniques
+    visits.where(created_at: 10.minutes.ago..Time.now).select("visitor_id").distinct.count
+  end
+
 end
